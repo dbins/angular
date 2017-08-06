@@ -1,0 +1,152 @@
+<html ng-app="teste">
+<head>
+	<base href="/">
+	<title>Cadastro de Cliente</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="js/angular.min.js"></script>
+	<script src="js/angular-animate.min.js"></script>
+	<script src="js/angular-route.min.js"></script>
+	<script src="js/angular-resource.min.js"></script>
+	<script src="js/ui-bootstrap-tpls-2.5.0.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="controllers/cliente-controller.js"></script>
+	<script src="directives/diretivas.js"></script>
+	
+	<style type="text/css">
+        input.ng-pristine {
+            background-color:white;
+        }
+
+        input.ng-touched.ng-invalid {
+            background-color:red;
+        }
+
+        input.ng-touched.ng-valid {
+            background-color:white;
+        }
+        
+    </style>
+</head>
+<body ng-controller="ClienteController">
+	<div class="container">
+	<form id="formulario_cliente" name="form1" action="/cliente" method="POST" novalidate ng-submit="gravar()">
+		<!--
+		<p>CPF:{{form1.CPF.$valid}}</p>
+		<p>E-mail:{{form1.email.$valid}}</p>
+		<p>Data Nascimento:{{form1.data_nascimento.$valid}}</p>
+		--->
+	
+		<div class="form-group">
+		<label>CPF: <input type="text" id="CPF" name="CPF" maxlength="11" class="form-control" ng-model="dados.CPF" is-number-key cpf-validator required/><br/>
+		  <ul>
+		  <li ng-show="form1.CPF.$error.cpfInvalid" ng-message="cpfInvalid">CPF Inválido</li>
+		  <li ng-show="form1.CPF.$error.cpfIncomplet" ng-message="cpfIncomplet">CPF Incompleto</li>
+		  </ul>
+		</div>
+	
+	
+		<div class="form-group">
+		<label>Nome: <input type="text" id="nome" ng-model = "dados.nome" name="nome" maxlength="50" class="form-control" only-letters-input required/></label>
+		<span ng-show="form1.nome.$error.required && form1.nome.$touched" class="form-control alert-danger">
+           Informe o nome
+        </span>
+		</div>
+		
+		<div class="form-group">
+		<label>Email: <input type="text" id="email" name="email" maxlength="50" class="form-control" ng-model="dados.email" validar-email required/></label>
+		<span ng-show="!form1.email.$valid && form1.email.$touched" class="form-control alert-danger">
+           O e-mail informado é inválido
+        </span>
+		</div>
+		
+		<div class="form-group">
+		<label>Data de Nascimento: <input type="text" id="data_nascimento" name="data_nascimento" maxlength="10" class="form-control" ng-model="dados.data_nascimento" validar-data validar-idade required/></label>
+		  <span ng-show="form1.data_nascimento.$error.dataInvalida && form1.data_nascimento.$touched" class="form-control alert-danger">
+		  A data está incorreta</span>
+		
+		<span ng-show="form1.data_nascimento.$error.idadeInvalid" class="form-control alert-danger">
+		  Você precisa ter mais de 18 anos</span>
+		</div>
+		<div class="form-group">
+		<label>Sexo:
+		<select name="bank_code"  class="form-control">
+			<option value="MASCULINO">Masculino</option>
+			<option value="FEMININO">Feminino</option>
+		</select>
+		</label>
+		</div>
+		
+		
+		<div class="form-group">
+		<label>CEP:<input type="text" id="CEP" name="CEP" maxlength="9" class="form-control"  ng-modeL="dados.CEP" is-number-key ng-minlength="8" ng-maxlength="8" required/></label>
+		<span ng-show="!form1.CEP.$valid && form1.CEP.$touched" class="form-control alert-danger">
+           Informe o CEP
+        </span>
+		</div>
+		
+		<div class="form-group">
+		<label><input type="button" id="btn_cep" value="Completar endereço com o meu CEP!" ng-click="pesquisar()"></label>
+		</div>
+		
+		<div class="form-group">
+		<label>Endereco: <input type="text" id="endereco" name="endereco" maxlength="50" class="form-control" readonly="true" ng-model="dados.endereco" required/></label>
+		<span ng-show="form1.endereco.$error.required && form1.endereco.$touched" class="form-control alert-danger">
+           Informe o endereço
+        </span>
+		</div>
+		
+		<div class="form-group">
+		<label>Numero: <input type="text" id="numero" name="numero" maxlength="50" class="form-control" ng-model="dados.numero" required/></label>
+		<span ng-show="form1.numero.$error.required && form1.numero.$touched" class="form-control alert-danger">
+           Informe o número
+        </span>
+		</div>
+		
+		<div class="form-group">
+		<label>Complemento: <input type="text" id="complemento" name="complemento" maxlength="50" class="form-control" ng-model="dados.complemento" /></label>
+		</div>
+		
+		<div class="form-group">
+		<label>Bairro: <input type="text" id="bairro" name="bairro" maxlength="50" class="form-control" readonly="true" ng-model="dados.bairro" required/></label>
+		<span ng-show="form1.bairro.$error.required && form1.bairro.$touched" class="form-control alert-danger">
+           Informe o bairro
+        </span>
+		</div>
+		
+		<div class="form-group">
+		<label>Cidade: <input type="text" id="cidade" name="cidade" maxlength="50" class="form-control" readonly="true" ng-model="dados.cidade" required/></label>
+		<span ng-show="form1.cidade.$error.required && form1.cidade.$touched" class="form-control alert-danger">
+         Informe a cidade
+        </span>
+		</div>
+		
+		<div class="form-group">
+		<label>Estado: <input type="text" id="estado" name="estado" maxlength="2" class="form-control" readonly="true" ng-model="dados.estado" required/></label>
+		<span ng-show="form1.estado.$error.required && form1.estado.$touched" class="form-control alert-danger">
+          Informe o estado
+        </span>
+		</div>
+		
+		<div class="form-group">
+		<label>DDD:<input type="text" id="ddd" name="ddd" maxlength="2" is-number-key class="form-control" ng-model="dados.ddd" ng-minlength="2" ng-maxlength="2" required/></label>
+		<span ng-show="!form1.ddd.$valid && form1.ddd.$touched" class="form-control alert-danger">
+            Preencha o DDD do telefone celular
+        </span>
+		</div>
+		
+		
+		<div class="form-group">
+		<label>Celular: <input type="text" id="celular" name="celular" maxlength="9"   class="form-control"  ng-model="dados.celular" ng-minlength="9" ng-maxlength="9" is-number-key ng-pattern="/^[6789][0-9]{8}/" required/></label>
+		<span ng-show="form1.celular.$error.pattern && form1.celular.$touched" class="form-control alert-danger">
+          O telefone celular informado está incorreto
+        </span>
+		</div>
+		
+		<div class="form-group">
+		<label><input type="submit" class="btn btn-primary" value="Gravar" ng-disabled="!form1.$valid"></input></label>
+		</div>
+		
+	</form>
+	</div>
+</body>
+</html>

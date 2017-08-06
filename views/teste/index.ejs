@@ -1,0 +1,68 @@
+<html ng-app="teste">
+<head>
+	<base href="/">
+	<title>Validar Cartão</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<script src="js/angular.min.js"></script>
+	<script src="js/angular-animate.min.js"></script>
+	<script src="js/angular-route.min.js"></script>
+	<script src="js/angular-resource.min.js"></script>
+	<script src="js/ui-bootstrap-tpls-2.5.0.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="controllers/cartao-controller.js"></script>
+	<script src="directives/diretivas.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<style type="text/css">
+        input.ng-pristine {
+            background-color:white;
+        }
+
+        input.ng-touched.ng-invalid {
+            background-color:red;
+        }
+
+        input.ng-touched.ng-valid {
+            background-color:white;
+        }
+        
+    </style>
+</head>
+<body ng-controller="CartaoController">
+	<div class="container">
+	<form id="payment_form" name="form1" action="/" method="POST" novalidate >
+		<div class="form-group">
+			<label>Número do cartão: <input type="text" id="card_number" name="card_number" maxlength="20" class="form-control" ng-model = "dados.card_number" is-number-key required/></label>
+			<span ng-show="form1.card_number.$error.required && form1.card_number.$touched" class="form-control alert-danger">
+			   Por favor informe o número do cartão
+			</span>
+		</div>
+		<div class="form-group">
+			<label>Nome (como escrito no cartão): <input type="text" id="card_holder_name" name="card_holder_name" maxlength="50" class="form-control" ng-model = "dados.card_holder_name" only-letters-input ng-minlength="5" required /></label>
+			<span ng-show="form1.card_holder_name.$error.required && form1.card_holder_name.$touched" class="form-control alert-danger">
+			  Por favor informe o nome
+			</span>
+		</div>
+		<div class="form-group">
+			<label>Mês de expiração: <input type="text" id="card_expiration_month" name="card_expiration_month" maxlength="2" class="form-control" ng-model = "dados.card_expiration_month" ng-pattern="/(^0?[1-9]$)|(^1[0-2]$)/" is-number-key required/></label>
+			<span ng-show="form1.card_expiration_month.$error.pattern && form1.card_expiration_month.$touched" class="form-control alert-danger">
+			  O mês de expiração informado está incorreto
+			</span>
+		</div>
+		<div class="form-group">
+			<label>Ano de expiração: <input type="text" id="card_expiration_year" name="card_expiration_year" maxlength="4" class="form-control" ng-model = "dados.card_expiration_year" ng-pattern="/^(201[789]|202\d)$/" is-number-key required/></label>
+			<span ng-show="form1.card_expiration_year.$error.pattern && form1.card_expiration_year.$touched" class="form-control alert-danger">
+			  O ano de expiração informado está incorreto
+			</span>
+		</div>
+		<div class="form-group">
+			<label>Código de segurança: <input type="text" id="card_cvv" name="card_cvv" maxlength="10" class="form-control" ng-model="dados.card_cvv" ng-minlength="2" is-number-key required/></label>
+			<span ng-show="form1.card_cvv.$error.required && form1.card_cvv.$touched" class="form-control alert-danger">
+			  Por favor informe o código de segurança
+			</span>
+		</div>
+		<br/>
+		<input type="button" class="btn btn-primary" value="Validar" ng-disabled="!form1.$valid"ng-click="gravar()"></input>
+	</form>
+	</div>
+</body>
+</html>
